@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+    function bodyOnLoad(){
+            var app = require('./app.js');
+            var ngui = require('nw.gui');
+
+            // Get the current window
+            var nwin = ngui.Window.get();
+            nwin.show();
+            nwin.maximize();
+            window.location.assign('http://localhost:8080/');
+    }
+      
+    </script>
+  </head>
+  <body  onload="bodyOnLoad()">
+  <h1>G&eacute;oTrouvetou</h1>
+  <p>Chargement en cours.</p>
+  <p>Veuillez patienter.</p>
+  </body>
+</html>

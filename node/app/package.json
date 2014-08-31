@@ -1,0 +1,20 @@
+{
+  "name": "GeoTrouvetou",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "express": "3.0.0alpha4",
+    "elasticsearch": "*"
+  },
+  "main": "index.html",
+  "node-main": "app.js",
+  "devDependencies": {
+    "coffee-script": "~1.7.1",  
+    "uglify-js": "~2.4.12"
+  },
+  "window": {
+    "title": "GéoTrouvetou",
+    "toolbar": true,
+    "frame": true
+  }
+}
