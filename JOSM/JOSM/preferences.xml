@@ -16,12 +16,7 @@
   <tag key='downloadprimitive.lasttype' value='1'/>
   <tag key='expert' value='true'/>
   <list key='file-open.history'>
-    <entry value='C:\WINXP\Profiles\25006103\My Documents\Downloads\W2287\lieux-dits3.osm'/>
-    <entry value='C:\WINXP\Profiles\25006103\My Documents\Downloads\W2287\lieux-dits4.osm'/>
-    <entry value='C:\WINXP\Profiles\25006103\My Documents\Downloads\W2287\lieux-dits1.osm'/>
-    <entry value='C:\WINXP\Profiles\25006103\My Documents\Downloads\W2287\lieux-dits2.osm'/>
-    <entry value='C:\temp\7zE1A1B.tmp\lieux-dits_ressemblants_nom_de_rue_-_NE_PAS_ENVOYER_SUR_OSM.osm'/>
-    <entry value='C:\WINXP\Profiles\25006103\My Documents\Downloads\W2128\Rue Julien David.osm'/>
+    
   </list>
   <tag key='geochat.visible' value='false'/>
   <tag key='gui.geometry' value='x=-4,y=-4,width=1288,height=1004'/>
@@ -37,7 +32,7 @@
       <tag key='icon' value='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAD9QTFRFAAAAi8ZBi8ZBi8ZBi8ZBkslMmc1YoNBkqNRwr9d8ttuIvd6UxeKgzOar0+m32u3D4vDP6fTb8Pfn9/vz////1BI4LwAAAAR0Uk5TAF+fzylxRuMAAADBSURBVDjLxZPRDoMgDEVVClRlgML/f+tKUTLNgGV72H0okXskLbTD8IFGAW8lxuxPUNXE/0ND6QzRAgQB0NS3gEbEBjDvkRSWGoDx0FwB3An4CrCRZ0wiKkC27oDSOX0F4MlyNqVZAMmfVvNi7JmDK4CPrypJbvIA1MWPATdeYlwPgAvPmxw1SEQpnTtPMFzzg68mEXh/iwwYtvyfgIU2d5kAy8AKJlwAKor6I0UNKsfl15a7AN227w5Od/T6w9vWE6pGGxHVqV03AAAAAElFTkSuQmCC'/>
     </map>
     <map>
-      <tag key='name' value='OpenStreetMap (Mapnik Blanc &amp; Noir)'/>
+      <tag key='name' value='OpenStreetMap (Mapnik Blanc & Noir)'/>
       <tag key='id' value='osm-mapnik-black_and_white'/>
       <tag key='type' value='tms'/>
       <tag key='url' value='http://{switch:a,b,c}.www.toolserver.org/tiles/bw-mapnik/{zoom}/{x}/{y}.png'/>
@@ -174,11 +169,11 @@
   <tag key='osb.uri.download' value='http://openstreetbugs.schokokeks.org/api/0.1/getBugs'/>
   <tag key='osb.uri.edit' value='http://openstreetbugs.schokokeks.org/api/0.1/editPOIexec'/>
   <tag key='osb.uri.new' value='http://openstreetbugs.schokokeks.org/api/0.1/addPOIexec'/>
-  <tag key='osm-download.bounds' value='46.6736936;-0.9138965;46.6872339;-0.8985497'/>
-  <tag key='osm-server.password' value='dtyvudent'/>
+  <tag key='osm-download.bounds' value=''/>
+  <tag key='osm-server.password' value=''/>
   <tag key='osm-server.upload-strategy' value='chunked'/>
   <tag key='osm-server.upload-strategy.chunk-size' value='50'/>
-  <tag key='osm-server.username' value='Julien_N'/>
+  <tag key='osm-server.username' value=''/>
   <tag key='plugin.mirrored_download.preferred-url' value='http://api.openstreetmap.fr/api/'/>
   <list key='plugin.mirrored_download.query-history'>
     <entry value=''/>
@@ -267,8 +262,6 @@
     <entry value='tagginggroup_Man Made/Man Made'/>
   </list>
   <list key='upload.comment.history'>
-    <entry value='BANO, Tallud St Gemme'/>
-    <entry value='BANO, Luçon'/>
   </list>
   <tag key='upload.comment.last-used' value='1409234340'/>
   <list key='upload.source.history'>
@@ -277,13 +270,13 @@
   <tag key='utilsplugin2.customurl' value='https://www.openstreetmap.org/{#type}/{#id}/history'/>
   <list key='utilsplugin2.urlHistory'>
     <entry value='Wikipedia'/>
-    <entry value='https://en.wikipedia.org/w/index.php?search={name}&amp;fulltext=Search'/>
+    <entry value='https://en.wikipedia.org/w/index.php?search={name}&fulltext=Search'/>
     <entry value='Wikipedia RU'/>
     <entry value='http://osm.mapki.com/history/{#type}.php?id={#id}'/>
     <entry value='Who Dit It?'/>
-    <entry value='http://simon04.dev.openstreetmap.org/whodidit/?zoom=12&amp;lat={#lat}&amp;lon={#lat}&amp;layers=BTT'/>
+    <entry value='http://simon04.dev.openstreetmap.org/whodidit/?zoom=12&lat={#lat}&lon={#lat}&layers=BTT'/>
     <entry value='Keep Right validator'/>
-    <entry value='http://keepright.ipax.at/report_map.php?zoom=14&amp;lat={#lat}&amp;lon={#lat}&amp;layers=B0T'/>
+    <entry value='http://keepright.ipax.at/report_map.php?zoom=14&lat={#lat}&lon={#lat}&layers=B0T'/>
     <entry value='Element history [demo, =Ctrl-Shift-H]'/>
     <entry value='https://www.openstreetmap.org/{#type}/{#id}/history'/>
     <entry value='Browse element [demo, =Ctrl-Shift-I]'/>
