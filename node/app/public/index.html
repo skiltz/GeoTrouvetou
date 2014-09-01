@@ -2,8 +2,7 @@
 <html ng-app="GeoTrouvetou" ng-controller="AppCtrl">
   <head>
     <title ng-bind="pageTitle"></title>
-    <meta charset="utf-8"> 
-
+    <meta charset="utf-8">
     <!-- social media tags -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@joshdmiller">
@@ -16,50 +15,21 @@
     <meta property="og:url" content="http://bit.ly/GeoTrouvetou" />
     <meta property="og:image" content="https://a248.e.akamai.net/assets.github.com/images/modules/logos_page/Octocat.png?1366128846" />
     <meta property="og:description" content="Non-Trivial AngularJS Made Easy: Everything you need to kickstart AngularJS projects: a best-practice directory structure, an intelligent build system, and the best web design libraries around.">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- font awesome from BootstrapCDN -->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
     
     <!-- leaflet -->
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
-
     <!-- compiled CSS -->
-    <link rel="stylesheet" type="text/css" href="vendor/angular-xeditable/dist/css/xeditable.css" />
     <link rel="stylesheet" type="text/css" href="assets/GeoTrouvetou-0.1.css" />
-
     <!-- compiled JavaScript -->
-    <script type="text/javascript" src="vendor/angular/angular.js"></script>
-    <script type="text/javascript" src="vendor/angular/angular-locale_fr-fr.js"></script>
-    <script type="text/javascript" src="vendor/angular-cookies/angular-cookies.js"></script>
-    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-leaflet-directive/angular-leaflet-directive.min.js"></script>
-    <script type="text/javascript" src="vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js"></script>
-    <script type="text/javascript" src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
-    <script type="text/javascript" src="vendor/angular-xeditable/dist/js/xeditable.js"></script>
-    <script type="text/javascript" src="src/app/acceuil/acceuil.js"></script>
-    <script type="text/javascript" src="src/app/aide/aide.js"></script>
-    <script type="text/javascript" src="src/app/app.js"></script>
-    <script type="text/javascript" src="src/app/communes/communes.js"></script>
-    <script type="text/javascript" src="src/app/departements/departements.js"></script>
-    <script type="text/javascript" src="src/app/detail/detail.js"></script>
-    <script type="text/javascript" src="src/app/edit/edit.js"></script>
-    <script type="text/javascript" src="src/app/home/home.js"></script>
-    <script type="text/javascript" src="src/app/map/map.js"></script>
-    <script type="text/javascript" src="src/app/recherche/recherche.js"></script>
-    <script type="text/javascript" src="src/app/voies/voies.js"></script>
-    <script type="text/javascript" src="src/common/ES/ES.js"></script>
-    <script type="text/javascript" src="src/common/GeoTrouvetouServices/GeoTrouvetouServices.js"></script>
-    <script type="text/javascript" src="src/common/plusOne/plusOne.js"></script>
-    <script type="text/javascript" src="templates-common.js"></script>
-    <script type="text/javascript" src="templates-app.js"></script>
-
+    <script type="text/javascript" src="assets/GeoTrouvetou-0.1.js"></script>
     <!-- leaflet -->
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
-
     <!-- it's stupid to have to load it here, but this is for the +1 button -->
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-      { "parsetags": "explicit" }
+    { "parsetags": "explicit" }
     </script>
   </head>
   <body>
@@ -67,18 +37,17 @@
       <div class="navbar navbar-default">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
-            ng-click="menuCollapsed = ! menuCollapsed">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+          ng-click="menuCollapsed = ! menuCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
           </button>
           <div class="navbar-brand">
             <img src="assets/geo-trouvetou.gif" style="height:100%;width:auto; margin-top: -7px;" alt="Logo"/>
             GéoTrouvetou
             <small>
-                v0.1
-
+            v0.1
             </small>
           </div>
         </div>
@@ -86,37 +55,42 @@
           <ul class="nav navbar-nav">
             <li ui-sref-active="active">
               <a href ui-sref="acceuil">
-                <i class="fa fa-home"></i>
-                Acceuil
+              <i class="fa fa-home"></i>
+              Acceuil
               </a>
             </li>
             <li ui-sref-active="active">
               <a href ui-sref="departements">
-                <i class="fa fa-info-circle"></i>
-                Départements
+              <i class="fa fa-info-circle"></i>
+              Départements
               </a>
             </li>
             <li ui-sref-active="active">
               <a href ui-sref="communes({departement:{{fav_dept}}})">
-                <i class="fa fa-info-circle"></i>
-                Communes du {{fav_dept}}
+              <i class="fa fa-info-circle"></i>
+              Communes du {{fav_dept}}
               </a>
             </li>
             <li ui-sref-active="active">
               <a href ui-sref="recherche">
-                <i class="fa fa-search"></i>
-                Chercher une voie
+              <i class="fa fa-search"></i>
+              Chercher une voie
+              </a>
+            </li>
+            <li ui-sref-active="active">
+              <a href ui-sref="recherche_bano">
+              <i class="fa fa-house"></i>
+              Recherche BANO
               </a>
             </li>
             <li ui-sref-active="active">
               <a href ui-sref="aide">
-                <i class="fa fa-life-ring"></i>
-                Aide
+              <i class="fa fa-life-ring"></i>
+              Aide
               </a>
             </li>
             <li >
               <a class="{{status}}"><i  class="fa fa-database "></i></a>
-
             </li>
           </ul>
         </div>
@@ -132,7 +106,6 @@
       <i ng-show="loadingLocations" class="fa fa-refresh"></i>
     </div>
     <div class="container" ui-view="main"></div>
-
     <footer class="footer">
       <div class="container">
         <div class="footer-inner">
@@ -143,17 +116,16 @@
             <li><a target="_blank" href="http://github.com/ngbp/ngbp"><i class="fa fa-github-sign"></i></a></li>
           </ul>
           
-
           <p>
-            (c) 2014 Julien Noblet. 
-            <br />
-            GéoTrouvetou is based on
-            <a href="http://www.angularjs.org">AngularJS</a>,
-            <a href="http://getbootstrap.com">Bootstrap</a>, 
-            <a href="http://angular-ui.github.com/bootstrap">UI Bootstrap</a>,
-            <a href="http://leafletjs.com">Lefleat</a>,
-            and 
-            <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>.
+          (c) 2014 Julien Noblet.
+          <br />
+          GéoTrouvetou is based on
+          <a href="http://www.angularjs.org">AngularJS</a>,
+          <a href="http://getbootstrap.com">Bootstrap</a>,
+          <a href="http://angular-ui.github.com/bootstrap">UI Bootstrap</a>,
+          <a href="http://leafletjs.com">Lefleat</a>,
+          and
+          <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>.
           </p>
         </div>
       </div>

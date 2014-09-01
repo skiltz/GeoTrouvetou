@@ -227,8 +227,19 @@
 
 	$.fn.forEach = Array.prototype.forEach;
 
+	// joey / jquery integration
+	$.joey = function( obj ) {
+		return $( window.joey( obj ) );
+	};
+
+	window.joey.plugins.push( function( obj ) {
+		if( obj instanceof jQuery ) {
+			return obj[0];
+		}
+	});
 
 })();
+
 /**
  * base class for creating inheritable classes
  * based on resigs 'Simple Javascript Inheritance Class' (based on base2 and prototypejs)
@@ -289,7 +300,7 @@
 	ut.require_template = function(f) { return f.require ? { tag: "SPAN", cls: "require", text: "*" } : null; };
 
 
-	var si_prefix = ['B','k','M', 'G', 'T', 'P', 'E', 'Y'];
+	var sib_prefix = ['B','ki','Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi', 'Yi'];
 
 	ut.byteSize_template = function(n) {
 		var i = 0;
@@ -297,7 +308,18 @@
 			i++;
 			n /= 1024;
 		}
-		return (i === 0 ? n.toString() : n.toFixed( 3 - parseInt(n,10).toString().length )) + ( si_prefix[ i ] || "..E" );
+		return (i === 0 ? n.toString() : n.toFixed( 3 - parseInt(n,10).toString().length )) + ( sib_prefix[ i ] || "..E" );
+	};
+
+	var sid_prefix = ['','k','M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+
+	ut.count_template = function(n) {
+		var i = 0;
+		while( n >= 1000 ) {
+			i++;
+			n /= 1000;
+		}
+		return i === 0 ? n.toString() : ( n.toFixed( 3 - parseInt(n,10).toString().length ) + ( sid_prefix[ i ] || "..E" ) );
 	};
 
 })( this.app );
@@ -1178,12 +1200,29 @@
 	var services = app.ns("services");
 	var ux = app.ns("ux");
 
+	function parse_version( v ) {
+		return v.match(/^(\d+)\.(\d+)\.(\d+)/).slice(1,4).map( function(d) { return parseInt(d || 0, 10); } );
+	}
+
 	services.Cluster = ux.Class.extend({
 		defaults: {
 			base_uri: "http://localhost:9200/"
 		},
 		init: function() {
 			this.base_uri = this.config.base_uri;
+		},
+		setVersion: function( v ) {
+			this.version = v;
+			this._version_parts = parse_version( v );
+		},
+		versionAtLeast: function( v ) {
+			var testVersion = parse_version( v );
+			for( var i = 0; i < 3; i++ ) {
+				if( testVersion[i] !== this._version_parts[i] ) {
+					return testVersion[i] < this._version_parts[i];
+				}
+			}
+			return true;
 		},
 		request: function( params ) {
 			return $.ajax( $.extend({
@@ -1203,6 +1242,7 @@
 	});
 
 })( this.jQuery, this.app );
+
 (function( app ) {
 
 	var services = app.ns("services");
@@ -1267,7 +1307,7 @@
 	});
 
 })( this.app );
-(function( $, app ) {
+(function( $, joey, app ) {
 
 	var ui = app.ns("ui");
 	var ux = app.ns("ux");
@@ -1309,8 +1349,15 @@
 		}
 	});
 
-})( this.jQuery, this.app );
-(function( $, app ) {
+	joey.plugins.push( function( obj ) {
+		if( obj instanceof ui.AbstractWidget ) {
+			return obj.el[0];
+		}
+	});
+
+})( this.jQuery, this.joey, this.app );
+
+(function( $, app, joey ) {
 
 	var ui = app.ns("ui");
 
@@ -1325,7 +1372,7 @@
 
 		init: function(parent) {
 			this._super();
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.field = this.el.find("[name="+this.config.name+"]");
 			this.label = this.config.label;
 			this.require = this.config.require;
@@ -1358,7 +1405,7 @@
 
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.joey );
 
 (function( app ) {
 
@@ -1411,7 +1458,7 @@
 
 
 
-(function( $, app ) {
+(function( $, joey, app ) {
 
 	var ui = app.ns("ui");
 
@@ -1426,7 +1473,7 @@
 
 		init: function(parent) {
 			this._super();
-			this.el = $(this.button_template())
+			this.el = $.joey(this.button_template())
 				.bind("click", this.click_handler);
 			this.config.disabled && this.disable();
 			this.attach( parent );
@@ -1456,14 +1503,14 @@
 
 		button_template: function() { return (
 			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this._baseCls, children: [
-				{ tag: 'DIV', cls: 'uiButton-content', child:
+				{ tag: 'DIV', cls: 'uiButton-content', children: [
 					{ tag: 'DIV', cls: 'uiButton-label', text: this.config.label }
-				}
+				] }
 			] }
 		); }
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.joey, this.app );
 
 (function( $, app ) {
 
@@ -1503,27 +1550,36 @@
 			this.value = null;
 			this.button = new ui.Button({
 				label: this.config.label,
-				onclick: function() {
-					this.fire("click", this, { value: this.value } );
-				}.bind(this)
+				onclick: this._click_handler
+			});
+			this.menu = new ui.SelectMenuPanel({
+				value: this.config.value,
+				items: this._getItems(),
+				onSelect: this._select_handler
 			});
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
-				menu: new ui.SelectMenuPanel({
-					value: this.config.value,
-					items: this.config.items,
-					onSelect: function( panel, event ) {
-						this.fire( "select", this, event );
-					}.bind(this)
-				})
+				menu: this.menu
 			});
 			this.el = $(this._main_template());
+		},
+		remove: function() {
+			this.menu.remove();
 		},
 		disable: function() {
 			this.button.disable();
 		},
 		enable: function() {
 			this.button.enable();
+		},
+		_click_handler: function() {
+			this.fire("click", this, { value: this.value } );
+		},
+		_select_handler: function( panel, event ) {
+			this.fire( "select", this, event );
+		},
+		_getItems: function() {
+			return this.config.items;
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: this._baseCls, children: [
@@ -1533,6 +1589,48 @@
 	});
 
 })( this.jQuery, this.app );
+
+(function( $, app, i18n ) {
+
+	var ui = app.ns("ui");
+
+	ui.RefreshButton = ui.SplitButton.extend({
+		defaults: {
+			timer: -1
+		},
+		init: function( parent ) {
+			this.config.label = i18n.text("General.RefreshResults");
+			this._super( parent );
+			this._doTimer( this.config.timer );
+		},
+		_doTimer: function( value ) {
+			this.value = value;
+			window.clearInterval( this._timer );
+			if( this.value > 0 ) {
+				this._timer = window.setInterval( this._refresh_handler, this.value );
+			}
+		},
+		_click_handler: function() {
+			this._refresh_handler();
+		},
+		_select_handler: function( el, event ) {
+			this._doTimer( event.value );
+			this.fire("change", this );
+		},
+		_refresh_handler: function() {
+			this.fire("refresh", this );
+		},
+		_getItems: function() {
+			return [
+				{ text: i18n.text("General.ManualRefresh"), value: -1 },
+				{ text: i18n.text("General.RefreshQuickly"), value: 100 },
+				{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
+				{ text: i18n.text("General.Refresh1minute"), value: 60000 }
+			];
+		}
+	});
+
+})( this.jQuery, this.app, this.i18n );
 
 (function( $, app ) {
 
@@ -1671,7 +1769,7 @@
 		setBody: function(body) {
 				this.body.empty().append(body);
 		},
-		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, child: this.config.body }; },
+		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, children: [ this.config.body ] }; },
 		_title_template: function() { return { tag: "SPAN", cls: "uiPanel-title", text: this.config.title }; },
 		_main_template: function() { return (
 			{ tag: "DIV", id: this.id(), cls: this._baseCls, children: [
@@ -1685,6 +1783,7 @@
 	});
 
 })( this.jQuery, this.app );
+
 (function( app ) {
 
 	var ui = app.ns("ui");
@@ -1748,7 +1847,7 @@
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};
-			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: $.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
+			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), children: [ $.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) ] };
 		},
 		_getPosition: function(jEv) {
 			var right = !! $(jEv.target).parents(".pull-right").length;
@@ -1868,8 +1967,8 @@
 			] };
 		},
 		_header_template: function(columns) {
-			var ret = { tag: "TABLE", child: this._headerRow_template(columns) };
-			ret.child.children.push(this._headerEndCap_template());
+			var ret = { tag: "TABLE", children: [ this._headerRow_template(columns) ] };
+			ret.children[0].children.push(this._headerEndCap_template());
 			return ret;
 		},
 		_headerRow_template: function(columns) {
@@ -1884,14 +1983,14 @@
 			}, this)};
 		},
 		_headerEndCap_template: function() {
-			return { tag: "TH", cls: "uiTable-headerEndCap", child: { tag: "DIV" } };
+			return { tag: "TH", cls: "uiTable-headerEndCap", children: [ { tag: "DIV" } ] };
 		},
 		_body_template: function(data, columns) {
 			return { tag: "TABLE", children: []
 				.concat(this._headerRow_template(columns))
 				.concat(data.map(function(row) {
 					return { tag: "TR", data: { row: row }, cls: "uiTable-row", children: columns.map(function(column){
-						return { tag: "TD", cls: "uiTable-cell", child: { tag: "DIV", text: (row[column] || "").toString() } };
+						return { tag: "TD", cls: "uiTable-cell", children: [ { tag: "DIV", text: (row[column] || "").toString() } ] };
 					})};
 				}))
 			};
@@ -2026,7 +2125,7 @@
 			},
 			"array": function (value) {
 				var results = value.map(function(v) {
-					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
+					return { tag: "LI", cls: this.expando(v), children: [ this['parse'](v) ] };
 				}, this);
 				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-array", children: results } : null), "]" ];
 			},
@@ -2056,6 +2155,7 @@
 	});
 
 })( this.jQuery, this.app );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -2123,7 +2223,7 @@
 
 		_body_template: function() {
 			var body = this._super();
-			body.child = new ui.JsonPretty({ obj: this.config.json });
+			body.children = [ new ui.JsonPretty({ obj: this.config.json }) ];
 			return body;
 		}
 	});
@@ -2165,7 +2265,7 @@
 					this.config.title,
 					( this.config.help && { tag: "SPAN", cls: "uiSidebarSection-help pull-right", onclick: this._showHelp_handler, text: i18n.text("General.HelpGlyph") } )
 				] }),
-				{ tag: "DIV", cls: "uiSidebarSection-body", child: this.config.body }
+				{ tag: "DIV", cls: "uiSidebarSection-body", children: [ this.config.body ] }
 			] }
 		); }
 	});
@@ -2304,7 +2404,7 @@
 						$(el).click();
 					}
 				});
-				// es throws a 500 if you specify types from different indicies with _all
+				// es throws a 500 if you specify types from different indices with _all
 				jEl.siblings(".uiQueryFilter-type.selected").forEach(function(el) {
 					if(this.metadata.types[$(el).text()].indices.intersection(indices).length === 0) {
 						$(el).click();
@@ -2442,9 +2542,9 @@
 		_aliasSelector_template: function() {
 			var aliases = Object.keys(this.metadata.aliases).sort();
 			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
-			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", child:
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", children: [
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
-			};
+			] };
 		},
 		_indexSelector_template: function() {
 			var indices = Object.keys( this.metadata.indices ).sort();
@@ -2763,7 +2863,7 @@
 							{ tag: "INPUT", type: "text", name: "path", value: this.config.path },
 							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(ut.option_template) },
 							{ tag: "TEXTAREA", name: "body", rows: 20, text: JSON.stringify(this.config.query) },
-							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: i18n.text("AnyRequest.Request") }, onclick: this._request_handler },
+							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", children: [ { tag: "B", text: i18n.text("AnyRequest.Request") } ], onclick: this._request_handler },
 							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
 							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, i18n.text("AnyRequest.Pretty") ] },
 							{ tag: "DIV", cls: "uiAnyRequest-jsonErr" }
@@ -3003,11 +3103,9 @@
 			return { tag: "TR", cls: "uiNodesView-node" + (node.master_node ? " master": ""), children: [
 				this._nodeIcon_template( node ),
 				{ tag: "TH", children: node.name === "Unassigned" ? [
-					{ tag: "DIV", cls: "uiNodesView-title", text: node.name }
+					{ tag: "H3", text: node.name }
 				] : [
-					{ tag: "DIV", children: [
-						{ tag: "SPAN", cls: "uiNodesView-title", text: node.cluster.name }
-					]},
+					{ tag: "H3", text: node.cluster.name },
 					{ tag: "DIV", text: node.cluster.hostname },
 					this.interactive ? this._nodeControls_template( node ) : null
 				] }
@@ -3046,7 +3144,7 @@
 			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? ut.byteSize_template( index.status.index.primary_size_in_bytes ) + " (" + ut.byteSize_template( index.status.index.size_in_bytes ) + ")" : "unknown" ) ); 
 			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs.toLocaleString() + " (" + index.status.docs.max_doc.toLocaleString() + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
-				{ tag: "DIV", cls: "uiNodesView-title", text: index.name },
+				{ tag: "H3", text: index.name },
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
 				this.interactive ? this._indexHeaderControls_template( index ) : null
@@ -3090,8 +3188,8 @@
 			}, this )	};
 		},
 		_main_template: function(cluster, indices) {
-			return { tag: "TABLE", cls: "uiNodesView", children: [
-				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
+			return { tag: "TABLE", cls: "table uiNodesView", children: [
+				{ tag: "THEAD", children: [ { tag: "TR", children: indices.map(this._indexHeader_template, this) } ] },
 				this._aliasRenderFunction( cluster, indices ),
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };
@@ -3157,30 +3255,16 @@
 		},
 		init: function() {
 			this._super();
-			this._resetTimer = null;
-			this._redrawValue = -1;
 			this.cluster = this.config.cluster;
 			this._clusterState = this.config.clusterState;
-			this._clusterState.on("data", this._refresh_handler );
-			this._refreshButton = new ui.SplitButton({
-				label: i18n.text("General.RefreshResults"),
-				value: this._redrawValue,
-				items: [
-					{ text: i18n.text("General.ManualRefresh"), value: -1 },
-					{ text: i18n.text("General.RefreshQuickly"), value: 100 },
-					{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
-					{ text: i18n.text("General.Refresh1minute"), value: 60000 }
-				],
-				onSelect: function( btn, event ) {
-					this._redrawValue = event.value;
-					if( event.value < 0 ) {
-						window.clearTimeout( this._resetTimer );
+			this._clusterState.on("data", this.draw_handler );
+			this._refreshButton = new ui.RefreshButton({
+				onRefresh: this.refresh.bind(this),
+				onChange: function( btn ) {
+					if( btn.value === -1 ) {
+						this.draw_handler();
 					}
-					this.refresh();
-				}.bind( this ),
-				onclick: function( btn, event ) {
-					this.refresh();
-				}.bind(this)
+				}.bind( this )
 			});
 			this._nodeSort = nodeSort_name;
 			this._nodeSortMenu = new ui.MenuButton({
@@ -3194,7 +3278,7 @@
 					],
 					onSelect: function( panel, event ) {
 						this._nodeSort = event.value;
-						this.refresh();
+						this.draw_handler();
 					}.bind(this)
 				})
 			});
@@ -3209,34 +3293,26 @@
 						{ value: "none", text: "None" } ],
 					onSelect: function( panel, event ) {
 						this._aliasRenderer = event.value;
-						this.refresh();
+						this.draw_handler();
 					}.bind(this)
 				})
 			});
 			this._indexFilter = new ui.TextField({
 				placeholder: "Index Filter",
-				onchange: this._refresh_handler
+				onchange: this.draw_handler
 			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.refresh();
-			this.on( "drawn", function( self ) {
-				if( self._redrawValue >= 0 ) {
-					self._resetTimer = setTimeout( function() {
-						self.refresh();
-					}, self._redrawValue );
-				}
-			} );
 		},
 		remove: function() {
-			this._clusterState.removeObserver( "data", this._refresh_handler );
+			this._clusterState.removeObserver( "data", this.draw_handler );
 		},
 		refresh: function() {
-			window.clearTimeout( this._resetTimer );
 			this._refreshButton.disable();
 			this._clusterState.refresh();
 		},
-		_refresh_handler: function() {
+		draw_handler: function() {
 			var data = this._clusterState;
 			var indexFilter;
 			try {
@@ -3358,7 +3434,6 @@
 			indices.unshift({ name: null });
 			this._drawNodesView( cluster, indices );
 			this._refreshButton.enable();
-			this.fire("drawn", this );
 		},
 		_drawNodesView: function( cluster, indices ) {
 			this._nodesView && this._nodesView.remove();
@@ -3366,7 +3441,7 @@
 				onRedraw: function() {
 					this.refresh();
 				}.bind(this),
-				interactive: ( this._redrawValue === -1 ),
+				interactive: ( this._refreshButton.value === -1 ),
 				aliasRenderer: this._aliasRenderer,
 				cluster: this.cluster,
 				data: {
@@ -3376,50 +3451,11 @@
 			});
 			this._nodesView.attach( this.tablEl );
 		},
-		_newIndex_handler: function() {
-			var fields = new app.ux.FieldCollection({
-				fields: [
-					new ui.TextField({ label: i18n.text("ClusterOverView.IndexName"), name: "_name", require: true }),
-					new ui.TextField({
-						label: i18n.text("ClusterOverview.NumShards"),
-						name: "number_of_shards",
-						value: "5",
-						require: function( val ) { return parseInt( val, 10 ) >= 1; }
-					}),
-					new ui.TextField({
-						label: i18n.text("ClusterOverview.NumReplicas"),
-						name: "number_of_replicas",
-						value: "1",
-						require: function( val ) { return parseInt( val, 10 ) >= 0; }
-					})
-				]
-			});
-			var dialog = new ui.DialogPanel({
-				title: i18n.text("ClusterOverview.NewIndex"),
-				body: new ui.PanelForm({ fields: fields }),
-				onCommit: function(panel, args) {
-					if(fields.validate()) {
-						var data = fields.getData();
-						var name = data["_name"];
-						delete data["_name"];
-						this.config.cluster.put( name, JSON.stringify({ settings: { index: data } }), function(d) {
-							dialog.close();
-							alert(JSON.stringify(d));
-							this.refresh();
-						}.bind(this) );
-					}
-				}.bind(this)
-			}).open();
-		},
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "uiClusterOverview", children: [
 				new ui.Toolbar({
 					label: i18n.text("Overview.PageTitle"),
 					left: [
-						new ui.Button({
-							label: i18n.text("ClusterOverview.NewIndex"),
-							onclick: this._newIndex_handler
-						}),
 						this._nodeSortMenu,
 						this._aliasMenu,
 						this._indexFilter
@@ -3951,7 +3987,8 @@
 				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
 				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugin" },
 				{ text: i18n.text("Nav.ClusterState"), path: "_cluster/state" },
-				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" }
+				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" },
+				{ text: i18n.text("Nav.Templates"), path: "_template" }
 			];
 			var cluster = this.config.cluster;
 			var quickPanels = {};
@@ -4000,6 +4037,122 @@
 			] }
 		); }
 	} );
+
+})( this.jQuery, this.app, this.i18n );
+
+(function( $, app, i18n ) {
+	
+	var ui = app.ns("ui");
+	var ut = app.ns("ut");
+
+	ui.IndexOverview = ui.Page.extend({
+		defaults: {
+			cluster: null
+		},
+		init: function() {
+			this._super();
+			this.cluster = this.config.cluster;
+			this._clusterState = this.config.clusterState;
+			this._clusterState.on("data", this._refresh_handler );
+			this.el = $(this._main_template());
+			this._refresh_handler();
+		},
+		remove: function() {
+			this._clusterState.removeObserver( "data", this._refresh_handler );
+		},
+		_refresh_handler: function() {
+			var state = this._clusterState;
+			var view = {
+				indices: acx.eachMap( state.status.indices, function( name, index ) {
+					return {
+						name: name,
+						state: index
+					};
+				}).sort( function( a, b ) {
+					return a.name < b.name ? -1 : 1;
+				})
+			};
+			this._indexViewEl && this._indexViewEl.remove();
+			this._indexViewEl = $( this._indexTable_template( view ) );
+			this.el.find(".uiIndexOverview-table").append( this._indexViewEl );
+		},
+		_newIndex_handler: function() {
+			var fields = new app.ux.FieldCollection({
+				fields: [
+					new ui.TextField({ label: i18n.text("ClusterOverView.IndexName"), name: "_name", require: true }),
+					new ui.TextField({
+						label: i18n.text("ClusterOverview.NumShards"),
+						name: "number_of_shards",
+						value: "5",
+						require: function( val ) { return parseInt( val, 10 ) >= 1; }
+					}),
+					new ui.TextField({
+						label: i18n.text("ClusterOverview.NumReplicas"),
+						name: "number_of_replicas",
+						value: "1",
+						require: function( val ) { return parseInt( val, 10 ) >= 0; }
+					})
+				]
+			});
+			var dialog = new ui.DialogPanel({
+				title: i18n.text("ClusterOverview.NewIndex"),
+				body: new ui.PanelForm({ fields: fields }),
+				onCommit: function(panel, args) {
+					if(fields.validate()) {
+						var data = fields.getData();
+						var name = data["_name"];
+						delete data["_name"];
+						this.config.cluster.put( name, JSON.stringify({ settings: { index: data } }), function(d) {
+							dialog.close();
+							alert(JSON.stringify(d));
+							this._clusterState.refresh();
+						}.bind(this) );
+					}
+				}.bind(this)
+			}).open();
+		},
+		_indexTable_template: function( view ) { return (
+			{ tag: "TABLE", cls: "table", children: [
+				{ tag: "THEAD", children: [
+					{ tag: "TR", children: [
+						{ tag: "TH" },
+						{ tag: "TH", children: [
+							{ tag: "H3", text: "Size" }
+						] },
+						{ tag: "TH", children: [
+							{ tag: "H3", text: "Docs" }
+						] }
+					] }
+				] },
+				{ tag: "TBODY", cls: "striped", children: view.indices.map( this._index_template, this ) }
+			] }
+		); },
+
+		_index_template: function( index ) { return (
+			{ tag: "TR", children: [
+				{ tag: "TD", children: [
+					{ tag: "H3", text: index.name }
+				] },
+				{ tag: "TD", text: ut.byteSize_template( index.state.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.state.index.size_in_bytes ) },
+				{ tag: "TD", text: ut.count_template( index.state.docs.num_docs ) }
+			] }
+		); },
+		_main_template: function() {
+			return { tag: "DIV", id: this.id(), cls: "uiIndexOverview", children: [
+				new ui.Toolbar({
+					label: i18n.text("IndexOverview.PageTitle"),
+					left: [
+						new ui.Button({
+							label: i18n.text("ClusterOverview.NewIndex"),
+							onclick: this._newIndex_handler
+						}),
+					]
+				}),
+				{ tag: "DIV", cls: "uiIndexOverview-table", children: this._indexViewEl }
+			] };
+		}
+
+	});
 
 })( this.jQuery, this.app, this.i18n );
 
@@ -4104,6 +4257,7 @@
 		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openIndexOverview_handler: function(jEv) { this.show("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }
@@ -4115,6 +4269,7 @@
 					this._header,
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Indices"), onclick: this._openIndexOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}

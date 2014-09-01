@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-206' visible='true' lat='46.6848035956' lon='-0.9053612409'>
+    <tag k='name' v='Tenement du Pré Billet' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-204' visible='true' lat='46.6855338277' lon='-0.91693650912'>
+    <tag k='name' v='La Chaignasse' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-202' visible='true' lat='46.688365681' lon='-0.91717054818'>
+    <tag k='name' v='Fief du Moulin' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-200' visible='true' lat='46.6837375146' lon='-0.91960919409'>
+    <tag k='name' v='Croisée de Caribot' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-198' visible='true' lat='46.6977211161' lon='-0.91599246765'>
+    <tag k='name' v='Tenement de la Bruyère' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-196' visible='true' lat='46.6866729088' lon='-0.92017491398'>
+    <tag k='name' v='Le Grand Coutelet' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-194' visible='true' lat='46.6943232688' lon='-0.91656051828'>
+    <tag k='name' v='La Bruyère' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-192' visible='true' lat='46.6873939933' lon='-0.90217483132'>
+    <tag k='name' v='Fief du Grand Air' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-190' visible='true' lat='46.6917364566' lon='-0.90589552284'>
+    <tag k='name' v='Fief du Tallud' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-188' visible='true' lat='46.6857824267' lon='-0.91206317214'>
+    <tag k='name' v='Tenement de la Riotière' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-186' visible='true' lat='46.6884233828' lon='-0.92435403583'>
+    <tag k='name' v='Tenement des Grandes Bruy' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-184' visible='true' lat='46.693885922' lon='-0.91156108059'>
+    <tag k='name' v='La Cour' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-182' visible='true' lat='46.6938462366' lon='-0.91909121738'>
+    <tag k='name' v='La Porte' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-180' visible='true' lat='46.6902057813' lon='-0.90371344432'>
+    <tag k='name' v='Le Tallud' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-178' action='modify' visible='true' lat='46.68041920835' lon='-0.90561676662'>
+    <tag k='name' v='Le Paliron' />
+    <tag k='place' v='hamlet' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-176' visible='true' lat='46.6836997425' lon='-0.89652992253'>
+    <tag k='name' v='L Etang des Landes' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-174' visible='true' lat='46.6885013531' lon='-0.90703410558'>
+    <tag k='name' v='Tenement du Tallud' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-172' visible='true' lat='46.6833581276' lon='-0.90083954722'>
+    <tag k='name' v='Tenement du Fief du Grand' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-170' action='modify' visible='true' lat='46.6824148137' lon='-0.90611230225'>
+    <tag k='name' v='Le Pré Billet' />
+    <tag k='place' v='neighbourhood' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-168' visible='true' lat='46.6850134386' lon='-0.92653138406'>
+    <tag k='name' v='La Chaponniere' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-166' visible='true' lat='46.6784129459' lon='-0.90321144427'>
+    <tag k='name' v='Le Geneton' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-164' visible='true' lat='46.6773096075' lon='-0.90333186687'>
+    <tag k='name' v='Champ du Bois' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-162' visible='true' lat='46.6904666183' lon='-0.91494598497'>
+    <tag k='name' v='Le Moulin de la Bruyère' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-160' visible='true' lat='46.6823712026' lon='-0.90870853626'>
+    <tag k='name' v='La Riotière' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+  <node id='-158' visible='true' lat='46.6885909657' lon='-0.91835137112'>
+    <tag k='name' v='La Tourette' />
+    <tag k='place' v='' />
+    <tag k='source' v='cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014' />
+  </node>
+</osm>

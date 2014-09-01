@@ -58,18 +58,23 @@ module.exports = function(grunt) {
 				src: [ fileSets.vendorJs, 'src/vendor/i18n/i18n.js', 'src/app/lang/en_strings.js', fileSets.srcJs ],
 				options: {
 					specs: 'src/app/**/*Spec.js',
-					helpers: 'test/spec/*Helper.js'
+					helpers: 'test/spec/*Helper.js',
+					display: "short",
+					summary: true
 				}
 			}
 		},
 
 		watch: {
-			scripts: {
-				files: ['src/**/*' ],
+			"scripts": {
+				files: ['src/**/*', 'test/spec/*' ],
 				tasks: ['default'],
 				options: {
 					spawn: false
 				}
+			},
+			"grunt": {
+				files: [ 'Gruntfile.js' ]
 			}
 		},
 

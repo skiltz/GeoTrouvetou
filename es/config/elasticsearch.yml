@@ -375,3 +375,5 @@ transport.tcp.compress: true
 #monitor.jvm.gc.old.warn: 10s
 #monitor.jvm.gc.old.info: 5s
 #monitor.jvm.gc.old.debug: 2s
+script.disable_dynamic: false
+script.default_lang: groovy

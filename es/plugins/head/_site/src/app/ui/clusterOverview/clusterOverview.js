@@ -54,30 +54,16 @@
 		},
 		init: function() {
 			this._super();
-			this._resetTimer = null;
-			this._redrawValue = -1;
 			this.cluster = this.config.cluster;
 			this._clusterState = this.config.clusterState;
-			this._clusterState.on("data", this._refresh_handler );
-			this._refreshButton = new ui.SplitButton({
-				label: i18n.text("General.RefreshResults"),
-				value: this._redrawValue,
-				items: [
-					{ text: i18n.text("General.ManualRefresh"), value: -1 },
-					{ text: i18n.text("General.RefreshQuickly"), value: 100 },
-					{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
-					{ text: i18n.text("General.Refresh1minute"), value: 60000 }
-				],
-				onSelect: function( btn, event ) {
-					this._redrawValue = event.value;
-					if( event.value < 0 ) {
-						window.clearTimeout( this._resetTimer );
+			this._clusterState.on("data", this.draw_handler );
+			this._refreshButton = new ui.RefreshButton({
+				onRefresh: this.refresh.bind(this),
+				onChange: function( btn ) {
+					if( btn.value === -1 ) {
+						this.draw_handler();
 					}
-					this.refresh();
-				}.bind( this ),
-				onclick: function( btn, event ) {
-					this.refresh();
-				}.bind(this)
+				}.bind( this )
 			});
 			this._nodeSort = nodeSort_name;
 			this._nodeSortMenu = new ui.MenuButton({
@@ -91,7 +77,7 @@
 					],
 					onSelect: function( panel, event ) {
 						this._nodeSort = event.value;
-						this.refresh();
+						this.draw_handler();
 					}.bind(this)
 				})
 			});
@@ -106,34 +92,26 @@
 						{ value: "none", text: "None" } ],
 					onSelect: function( panel, event ) {
 						this._aliasRenderer = event.value;
-						this.refresh();
+						this.draw_handler();
 					}.bind(this)
 				})
 			});
 			this._indexFilter = new ui.TextField({
 				placeholder: "Index Filter",
-				onchange: this._refresh_handler
+				onchange: this.draw_handler
 			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.refresh();
-			this.on( "drawn", function( self ) {
-				if( self._redrawValue >= 0 ) {
-					self._resetTimer = setTimeout( function() {
-						self.refresh();
-					}, self._redrawValue );
-				}
-			} );
 		},
 		remove: function() {
-			this._clusterState.removeObserver( "data", this._refresh_handler );
+			this._clusterState.removeObserver( "data", this.draw_handler );
 		},
 		refresh: function() {
-			window.clearTimeout( this._resetTimer );
 			this._refreshButton.disable();
 			this._clusterState.refresh();
 		},
-		_refresh_handler: function() {
+		draw_handler: function() {
 			var data = this._clusterState;
 			var indexFilter;
 			try {
@@ -255,7 +233,6 @@
 			indices.unshift({ name: null });
 			this._drawNodesView( cluster, indices );
 			this._refreshButton.enable();
-			this.fire("drawn", this );
 		},
 		_drawNodesView: function( cluster, indices ) {
 			this._nodesView && this._nodesView.remove();
@@ -263,7 +240,7 @@
 				onRedraw: function() {
 					this.refresh();
 				}.bind(this),
-				interactive: ( this._redrawValue === -1 ),
+				interactive: ( this._refreshButton.value === -1 ),
 				aliasRenderer: this._aliasRenderer,
 				cluster: this.cluster,
 				data: {
@@ -273,50 +250,11 @@
 			});
 			this._nodesView.attach( this.tablEl );
 		},
-		_newIndex_handler: function() {
-			var fields = new app.ux.FieldCollection({
-				fields: [
-					new ui.TextField({ label: i18n.text("ClusterOverView.IndexName"), name: "_name", require: true }),
-					new ui.TextField({
-						label: i18n.text("ClusterOverview.NumShards"),
-						name: "number_of_shards",
-						value: "5",
-						require: function( val ) { return parseInt( val, 10 ) >= 1; }
-					}),
-					new ui.TextField({
-						label: i18n.text("ClusterOverview.NumReplicas"),
-						name: "number_of_replicas",
-						value: "1",
-						require: function( val ) { return parseInt( val, 10 ) >= 0; }
-					})
-				]
-			});
-			var dialog = new ui.DialogPanel({
-				title: i18n.text("ClusterOverview.NewIndex"),
-				body: new ui.PanelForm({ fields: fields }),
-				onCommit: function(panel, args) {
-					if(fields.validate()) {
-						var data = fields.getData();
-						var name = data["_name"];
-						delete data["_name"];
-						this.config.cluster.put( name, JSON.stringify({ settings: { index: data } }), function(d) {
-							dialog.close();
-							alert(JSON.stringify(d));
-							this.refresh();
-						}.bind(this) );
-					}
-				}.bind(this)
-			}).open();
-		},
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "uiClusterOverview", children: [
 				new ui.Toolbar({
 					label: i18n.text("Overview.PageTitle"),
 					left: [
-						new ui.Button({
-							label: i18n.text("ClusterOverview.NewIndex"),
-							onclick: this._newIndex_handler
-						}),
 						this._nodeSortMenu,
 						this._aliasMenu,
 						this._indexFilter

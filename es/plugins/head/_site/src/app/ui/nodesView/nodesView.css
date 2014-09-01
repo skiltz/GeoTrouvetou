@@ -1,15 +1,7 @@
-.uiNodesView {
-	border-collapse: collapse;
-}
 .uiNodesView TH,
 .uiNodesView TD {
 	vertical-align: top;
 	padding: 2px 20px;
-}
-
-.uiNodesView TH {
-	font-weight: normal;
-	text-align: left;
 }
 
 .uiNodesView TH.close,
@@ -32,11 +24,6 @@
 
 .uiNodesView .uiMenuButton .uiButton-label {
 	padding: 0px 17px 0px 7px;
-}
-
-.uiNodesView-title {
-	font-weight: bold;
-	font-size: 140%;
 }
 
 .uiNodesView-hasAlias {

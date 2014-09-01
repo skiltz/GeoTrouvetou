@@ -177,11 +177,9 @@
 			return { tag: "TR", cls: "uiNodesView-node" + (node.master_node ? " master": ""), children: [
 				this._nodeIcon_template( node ),
 				{ tag: "TH", children: node.name === "Unassigned" ? [
-					{ tag: "DIV", cls: "uiNodesView-title", text: node.name }
+					{ tag: "H3", text: node.name }
 				] : [
-					{ tag: "DIV", children: [
-						{ tag: "SPAN", cls: "uiNodesView-title", text: node.cluster.name }
-					]},
+					{ tag: "H3", text: node.cluster.name },
 					{ tag: "DIV", text: node.cluster.hostname },
 					this.interactive ? this._nodeControls_template( node ) : null
 				] }
@@ -220,7 +218,7 @@
 			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? ut.byteSize_template( index.status.index.primary_size_in_bytes ) + " (" + ut.byteSize_template( index.status.index.size_in_bytes ) + ")" : "unknown" ) ); 
 			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs.toLocaleString() + " (" + index.status.docs.max_doc.toLocaleString() + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
-				{ tag: "DIV", cls: "uiNodesView-title", text: index.name },
+				{ tag: "H3", text: index.name },
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
 				this.interactive ? this._indexHeaderControls_template( index ) : null
@@ -264,8 +262,8 @@
 			}, this )	};
 		},
 		_main_template: function(cluster, indices) {
-			return { tag: "TABLE", cls: "uiNodesView", children: [
-				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
+			return { tag: "TABLE", cls: "table uiNodesView", children: [
+				{ tag: "THEAD", children: [ { tag: "TR", children: indices.map(this._indexHeader_template, this) } ] },
 				this._aliasRenderFunction( cluster, indices ),
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };
