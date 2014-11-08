@@ -1,39 +1,22 @@
-/*global angular */
-angular.module('GeoTrouvetou.admin', [
-  'ui.router'
-])
-
-/**
- * Each section or module of the site can also have its own routes. AngularJS
- * will handle ensuring they are all available at run-time, but splitting it
- * this way makes each module more "self-contained".
- */
-.config(['$stateProvider',
+angular.module('GeoTrouvetou.admin', ['ui.router']).config([
+  '$stateProvider',
   function config($stateProvider) {
-    "use strict";
+    'use strict';
     $stateProvider.state('admin', {
       url: '/admin',
       views: {
-        "main": {
+        'main': {
           controller: 'adminCtrl',
           templateUrl: 'admin/admin.tpl.html'
         }
       },
-      data: {
-        pageTitle: 'Administration'
-      }
+      data: { pageTitle: 'Administration' }
     });
   }
-])
-
-/**
- * And of course we define a controller for our route.
- */
-.controller('adminCtrl', ['$scope',
+]).controller('adminCtrl', [
+  '$scope',
   function adminController($scope) {
-    "use strict";
-    //console.log("I'm in AcceuilController!"); // To remove ;)
+    'use strict';
   }
-])
-
+]);
 ;
