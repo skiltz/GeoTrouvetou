@@ -2,29 +2,23 @@ angular.module('GeoTrouvetou.aide', [
   'ui.router',
   'placeholders',
   'ui.bootstrap'
-])
-
-.config(['$stateProvider',
+]).config([
+  '$stateProvider',
   function config($stateProvider) {
     $stateProvider.state('aide', {
       url: '/aide',
       views: {
-        "main": {
+        'main': {
           controller: 'AideCtrl',
           templateUrl: 'aide/aide.tpl.html'
         }
       },
-      data: {
-        pageTitle: 'Aide - Manuel'
-      }
+      data: { pageTitle: 'Aide - Manuel' }
     });
   }
-])
-
-.controller('AideCtrl', ['$scope',
+]).controller('AideCtrl', [
+  '$scope',
   function AideCtrl($scope) {
-
   }
-])
-
+]);
 ;
