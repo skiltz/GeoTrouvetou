@@ -1,8 +1,11 @@
 @echo off
 
 SETLOCAL
-TITLE GeoTrouvetou Elastic Elasticsearch 1.3.2
-set JAVA_HOME="c:\PROGRA~1\JAVA\jre7"
+
+TITLE GeoTrouvetou Elastic Elasticsearch 1.4.0
+
+SET mypath=%~dp0
+set JAVA_HOME=%mypath%jre7
 
 CALL %~dp0elasticsearch.in.bat
 
