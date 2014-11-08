@@ -61,7 +61,7 @@ if exist npm.cmd (
   echo Your environment has been set up for using Node.js !version!.
 )
 
-start "" /MIN "cmd /C ..\es\bin\elasticsearch.bat"
+rem start "" /MIN "cmd /C ..\es\bin\elasticsearch.bat"
 
 node app/app.js
 popd

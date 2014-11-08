@@ -1,5 +1,5 @@
 /*global angular */
-angular.module('GeoTrouvetou.acceuil', [
+angular.module('GeoTrouvetou.stats', [
   'ui.router'
 ])
 
@@ -11,16 +11,16 @@ angular.module('GeoTrouvetou.acceuil', [
 .config(['$stateProvider',
   function config($stateProvider) {
     "use strict";
-    $stateProvider.state('acceuil', {
-      url: '/acceuil',
+    $stateProvider.state('stats', {
+      url: '/stats',
       views: {
         "main": {
-          controller: 'AcceuilCtrl',
-          templateUrl: 'acceuil/acceuil.tpl.html'
+          controller: 'statsCtrl',
+          templateUrl: 'stats/stats.tpl.html'
         }
       },
       data: {
-        pageTitle: 'Acceuil'
+        pageTitle: 'Statistiques'
       }
     });
   }
@@ -29,8 +29,8 @@ angular.module('GeoTrouvetou.acceuil', [
 /**
  * And of course we define a controller for our route.
  */
-.controller('AcceuilCtrl', ['$scope',
-  function AcceuilCtrl($scope) {
+.controller('statsCtrl', ['$scope',
+  function statsController($scope) {
     "use strict";
     //console.log("I'm in AcceuilController!"); // To remove ;)
   }
