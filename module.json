@@ -1,0 +1,14 @@
+{
+  "name": "GeoTrouvetou",
+  "version": "0.0.7",
+  "private": "true",
+  "dependencies": {
+    "GeoTrouvetou-app": "0.0.7",
+    "GeoTrouvetou-chromium": "39.0.2127",
+    "GeoTrouvetou-es": "1.4.0",
+    "GeoTrouvetou-josm": "0.0.7347",
+    "GeoTrouvetou-jre": "1.7.0",
+    "GeoTrouvetou-nodejs": "0.10.29",
+    "GeoTrouvetou-server": "0.0.7"
+  }
+}

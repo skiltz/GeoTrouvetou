@@ -1,0 +1,30 @@
+{
+  "GeoTrouvetou-app": {
+    "path": "app",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-app/releases"
+  },
+  "GeoTrouvetou-chromium": {
+    "path": "chromium",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-chromium/releases"
+  },
+  "GeoTrouvetou-es": {
+    "path": "es",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-es/releases"
+  },
+  "GeoTrouvetou-josm": {
+    "path": "josm",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-josm/releases"
+  },
+  "GeoTrouvetou-jre": {
+    "path": "jre",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-jre/releases"
+  },
+  "GeoTrouvetou-nodejs": {
+    "path": "nodejs",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-nodejs/releases"
+  },
+  "GeoTrouvetou-server": {
+    "path": "server",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-server/releases"
+  }
+}
