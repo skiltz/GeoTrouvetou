@@ -1,0 +1,21 @@
+[submodule "josm"]
+	path = josm
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-josm.git
+[submodule "es"]
+	path = es
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-es.git
+[submodule "jre"]
+	path = jre
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-jre.git
+[submodule "chromium"]
+	path = chromium
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-chromium.git
+[submodule "nodejs"]
+	path = nodejs
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-nodejs.git
+[submodule "server"]
+	path = server
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-server.git
+[submodule "app"]
+	path = app
+	url = https://skiltz:nakies@github.com/skiltz/GeoTrouvetou-app.git
