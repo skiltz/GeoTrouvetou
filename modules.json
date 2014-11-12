@@ -1,4 +1,8 @@
 {
+  "GeoTrouvetou": {
+    "path": ".",
+    "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou/releases"
+  },
   "GeoTrouvetou-app": {
     "path": "app",
     "releases": "https://api.github.com/repos/skiltz/GeoTrouvetou-app/releases"
