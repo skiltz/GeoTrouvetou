@@ -4,7 +4,7 @@
   "private": "true",
   "dependencies": {
     "GeoTrouvetou-app": "0.0.7",
-    "GeoTrouvetou-chromium": "39.0.2127",
+    "GeoTrouvetou-chromium": "41.0.2243.0",
     "GeoTrouvetou-es": "1.4.0",
     "GeoTrouvetou-josm": "0.0.7643",
     "GeoTrouvetou-jre": "1.7.0",
